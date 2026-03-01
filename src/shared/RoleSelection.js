@@ -104,53 +104,42 @@ export class RoleSelection {
         const html5QrCode = new Html5Qrcode("qr-reader");
         this.scanner = html5QrCode;
 
-        Html5Qrcode.getCameras().then(devices => {
-            if (devices && devices.length) {
-                html5QrCode.start(
-                    devices[0].id,
-                    { fps: 10, qrbox: 250 },
-                    (decodedText) => {
-                        try {
-                            const url = new URL(decodedText);
-                            const room = url.searchParams.get("room");
+        html5QrCode.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 250 },
+            (decodedText) => {
+                try {
+                    const url = new URL(decodedText);
+                    const room = url.searchParams.get("room");
 
-                            if (room) {
-                                this.container.querySelector('#room-id').value = room.toUpperCase();
-                            } else if (decodedText.length === 6) {
-                                // Fallback for raw codes
-                                this.container.querySelector('#room-id').value = decodedText.toUpperCase();
-                            }
-
-                            html5QrCode.stop().then(() => {
-                                scannerContainer.remove();
-                                this.scanner = null;
-                            });
-
-                        } catch (err) {
-                            // If it's not a URL, check if it's a 6-char code
-                            if (decodedText.length === 6) {
-                                this.container.querySelector('#room-id').value = decodedText.toUpperCase();
-                                html5QrCode.stop().then(() => {
-                                    scannerContainer.remove();
-                                    this.scanner = null;
-                                });
-                            } else {
-                                console.log("Invalid QR Data:", decodedText);
-                            }
-                        }
+                    const roomIdInput = this.container.querySelector('#room-id');
+                    if (room) {
+                        roomIdInput.value = room.toUpperCase();
+                    } else if (decodedText.length === 6) {
+                        // Fallback for raw codes
+                        roomIdInput.value = decodedText.toUpperCase();
                     }
-                ).catch(err => {
-                    console.log("Start error:", err);
-                    scannerContainer.remove();
-                    this.scanner = null;
-                });
-            } else {
-                alert("No cameras found.");
-                scannerContainer.remove();
-                this.scanner = null;
+
+                    html5QrCode.stop().then(() => {
+                        scannerContainer.remove();
+                        this.scanner = null;
+                    });
+
+                } catch (err) {
+                    // If it's not a URL, check if it's a 6-char code
+                    if (decodedText.length === 6) {
+                        this.container.querySelector('#room-id').value = decodedText.toUpperCase();
+                        html5QrCode.stop().then(() => {
+                            scannerContainer.remove();
+                            this.scanner = null;
+                        });
+                    } else {
+                        console.log("Invalid QR Data:", decodedText);
+                    }
+                }
             }
-        }).catch(err => {
-            console.log("Camera error:", err);
+        ).catch(err => {
+            console.log("Camera start error:", err);
             scannerContainer.remove();
             this.scanner = null;
         });
