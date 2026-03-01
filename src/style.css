@@ -165,6 +165,44 @@ input:focus {
     cursor: pointer;
 }
 
+.scanner-container {
+    width: 100%;
+    max-width: 300px;
+    margin: 15px auto;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    display: none;
+}
+
+#reader {
+    width: 100% !important;
+}
+
+#reader__status_span {
+    display: none !important;
+}
+
+#qr-reader {
+    border: 2px solid #38bdf8;
+    padding: 10px;
+    border-radius: 10px;
+    background: #111827;
+}
+
+.button-scan {
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent-color);
+    border: 1px dashed var(--accent-color);
+    margin-bottom: 12px;
+}
+
+.button-scan:hover {
+    background: rgba(56, 189, 248, 0.2);
+}
+
 .button {
     width: 100%;
     padding: 14px;
